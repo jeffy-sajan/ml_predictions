@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Machine Learning Predictions</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+        .prediction-card {
+            margin-bottom: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-control {
+            border-radius: 5px;
+            padding: 8px 12px;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+            padding: 8px 20px;
+            border-radius: 5px;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+        .result-box {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: #fff;
+            border: 1px solid #dee2e6;
+        }
+        .danger {
+            color: #dc3545;
+            margin-bottom: 10px;
+        }
+        .success {
+            color: #28a745;
+            margin-bottom: 10px;
+        }
+        .prediction-title {
+            background-color: #007bff;
+            color: white;
+            padding: 15px;
+            border-radius: 10px 10px 0 0;
+        }
+        .prediction-section {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 0 0 10px 10px;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        .input-group-text {
+            background-color: #e9ecef;
+            border: 1px solid #ced4da;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center mb-5">Machine Learning Predictions</h1>
+        
+        <!-- Calories Prediction -->
+        <div class="card prediction-card">
+            <div class="prediction-title">
+                <h3 class="mb-0">Calories Burned Prediction</h3>
+            </div>
+            <div class="prediction-section">
+                <form id="caloriesForm">
+                    <div class="input-group">
+                        <span class="input-group-text">Kilometers Run</span>
+                        <input type="number" id="km_run" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Predict Calories</button>
+                </form>
+                <div id="caloriesResult" class="result-box"></div>
+            </div>
+        </div>
+
+        <!-- Salary Prediction -->
+        <div class="card prediction-card">
+            <div class="prediction-title">
+                <h3 class="mb-0">Salary Prediction</h3>
+            </div>
+            <div class="prediction-section">
+                <form id="salaryForm">
+                    <div class="input-group">
+                        <span class="input-group-text">Experience (years)</span>
+                        <input type="number" id="experience" class="form-control" required>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-text">Education Level</span>
+                        <input type="number" id="education_level" class="form-control" required>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-text">Age</span>
+                        <input type="number" id="age" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Predict Salary</button>
+                </form>
+                <div id="salaryResult" class="result-box"></div>
+            </div>
+        </div>
+
+        <!-- House Price Prediction -->
+        <div class="card prediction-card">
+            <div class="prediction-title">
+                <h3 class="mb-0">House Price Prediction</h3>
+            </div>
+            <div class="prediction-section">
+                <form id="houseForm">
+                    <div class="input-group">
+                        <span class="input-group-text">Square Footage</span>
+                        <input type="number" id="square_footage" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Predict Price</button>
+                </form>
+                <div id="houseResult" class="result-box"></div>
+            </div>
+        </div>
+
+        <!-- Diabetes Prediction -->
+        <div class="card prediction-card">
+            <div class="prediction-title">
+                <h3 class="mb-0">Diabetes Prediction</h3>
+            </div>
+            <div class="prediction-section">
+                <form id="diabetesForm">
+                    <div class="input-group">
+                        <span class="input-group-text">Glucose Level</span>
+                        <input type="number" id="diabetes_glucose" name="glucose" class="form-control" required>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-text">BMI</span>
+                        <input type="number" id="diabetes_bmi" name="bmi" class="form-control" required>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-text">Age</span>
+                        <input type="number" id="diabetes_age" name="age" class="form-control" required>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-text">Blood Pressure</span>
+                        <input type="number" id="diabetes_blood_pressure" name="blood_pressure" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Predict Diabetes</button>
+                </form>
+                <div id="diabetesResult" class="result-box"></div>
+            </div>
+        </div>
+
+        <!-- Heart Disease Prediction -->
+        <div class="card prediction-card">
+            <div class="prediction-title">
+                <h3 class="mb-0">Heart Disease Prediction</h3>
+            </div>
+            <div class="prediction-section">
+                <form id="heartForm">
+                    <div class="input-group">
+                        <span class="input-group-text">Cholesterol Level</span>
+                        <input type="number" id="heart_cholesterol" name="cholesterol" class="form-control" required>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-text">Blood Pressure</span>
+                        <input type="number" id="heart_blood_pressure" name="blood_pressure" class="form-control" required>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-text">Age</span>
+                        <input type="number" id="heart_age" name="age" class="form-control" required>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-text">Smoking (0/1)</span>
+                        <input type="number" id="heart_smoking" name="smoking" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Predict Heart Disease</button>
+                </form>
+                <div id="heartResult" class="result-box"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Wait for the DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded');
+
+            // Helper function to validate numbers
+            function validateNumber(input) {
+                const value = input.value.trim();
+                if (!value) return false;
+                const num = parseFloat(value);
+                return !isNaN(num) && isFinite(num) && num >= 0;
+            }
+
+            // Helper function to show error message
+            function showError(element, message) {
+                element.innerHTML = `<p class="danger">${message}</p>`;
+            }
+
+            // Helper function to show success message
+            function showSuccess(element, message) {
+                element.innerHTML = `<p class="success">${message}</p>`;
+            }
+
+            // Calories Prediction
+            const caloriesForm = document.getElementById('caloriesForm');
+            if (caloriesForm) {
+                caloriesForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    console.log('Calories form submitted');
+                    
+                    const kmRunInput = document.getElementById('km_run');
+                    const resultDiv = document.getElementById('caloriesResult');
+                    
+                    if (!validateNumber(kmRunInput)) {
+                        showError(resultDiv, 'Please enter a valid number for kilometers run.');
+                        return;
+                    }
+                    
+                    try {
+                        const response = await fetch('/predict_calories', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ km_run: parseFloat(kmRunInput.value) })
+                        });
+                        
+                        if (!response.ok) {
+                            const error = await response.json();
+                            showError(resultDiv, error.error || 'Server error');
+                            return;
+                        }
+                        
+                        const data = await response.json();
+                        showSuccess(resultDiv, `Estimated Calories Burned: <strong>${data.calories}</strong> calories`);
+                    } catch (error) {
+                        console.error('Calories error:', error);
+                        showError(resultDiv, 'Error: ' + error.message);
+                    }
+                });
+            }
+
+            // Salary Prediction
+            const salaryForm = document.getElementById('salaryForm');
+            if (salaryForm) {
+                salaryForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    console.log('Salary form submitted');
+                    
+                    const experienceInput = document.getElementById('experience');
+                    const educationLevelInput = document.getElementById('education_level');
+                    const ageInput = document.getElementById('age');
+                    const resultDiv = document.getElementById('salaryResult');
+                    
+                    if (!validateNumber(experienceInput) || 
+                        !validateNumber(educationLevelInput) || 
+                        !validateNumber(ageInput)) {
+                        showError(resultDiv, 'Please enter valid numbers for all fields.');
+                        return;
+                    }
+                    
+                    try {
+                        const response = await fetch('/predict_salary', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                experience: parseFloat(experienceInput.value),
+                                education_level: parseFloat(educationLevelInput.value),
+                                age: parseFloat(ageInput.value)
+                            })
+                        });
+                        
+                        if (!response.ok) {
+                            const error = await response.json();
+                            showError(resultDiv, error.error || 'Server error');
+                            return;
+                        }
+                        
+                        const data = await response.json();
+                        showSuccess(resultDiv, `Estimated Salary: <strong>${data.salary}</strong> $`);
+                    } catch (error) {
+                        console.error('Salary error:', error);
+                        showError(resultDiv, 'Error: ' + error.message);
+                    }
+                });
+            }
+
+            // House Price Prediction
+            const houseForm = document.getElementById('houseForm');
+            if (houseForm) {
+                houseForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    console.log('House form submitted');
+                    
+                    const squareFootageInput = document.getElementById('square_footage');
+                    const resultDiv = document.getElementById('houseResult');
+                    
+                    if (!validateNumber(squareFootageInput)) {
+                        showError(resultDiv, 'Please enter a valid number for square footage.');
+                        return;
+                    }
+                    
+                    try {
+                        const response = await fetch('/predict_house_price', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ square_footage: parseFloat(squareFootageInput.value) })
+                        });
+                        
+                        if (!response.ok) {
+                            const error = await response.json();
+                            showError(resultDiv, error.error || 'Server error');
+                            return;
+                        }
+                        
+                        const data = await response.json();
+                        showSuccess(resultDiv, `Estimated House Price: <strong>${data.price}</strong> $`);
+                    } catch (error) {
+                        console.error('House error:', error);
+                        showError(resultDiv, 'Error: ' + error.message);
+                    }
+                });
+            }
+
+            // Diabetes Prediction
+            const diabetesForm = document.getElementById('diabetesForm');
+            if (diabetesForm) {
+                diabetesForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    console.log('Diabetes form submitted');
+                    
+                    const glucoseInput = document.getElementById('diabetes_glucose');
+                    const bmiInput = document.getElementById('diabetes_bmi');
+                    const ageInput = document.getElementById('diabetes_age');
+                    const bloodPressureInput = document.getElementById('diabetes_blood_pressure');
+                    const resultDiv = document.getElementById('diabetesResult');
+                    
+                    // Validate each field individually
+                    if (!validateNumber(glucoseInput)) {
+                        showError(resultDiv, 'Please enter a valid number for Glucose Level.');
+                        return;
+                    }
+                    if (!validateNumber(bmiInput)) {
+                        showError(resultDiv, 'Please enter a valid number for BMI.');
+                        return;
+                    }
+                    if (!validateNumber(ageInput)) {
+                        showError(resultDiv, 'Please enter a valid number for Age.');
+                        return;
+                    }
+                    if (!validateNumber(bloodPressureInput)) {
+                        showError(resultDiv, 'Please enter a valid number for Blood Pressure.');
+                        return;
+                    }
+                    
+                    try {
+                        const response = await fetch('/predict_diabetes', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                glucose: parseFloat(glucoseInput.value),
+                                bmi: parseFloat(bmiInput.value),
+                                age: parseFloat(ageInput.value),
+                                blood_pressure: parseFloat(bloodPressureInput.value)
+                            })
+                        });
+                        
+                        if (!response.ok) {
+                            const error = await response.json();
+                            showError(resultDiv, error.error || 'Server error');
+                            return;
+                        }
+                        
+                        const data = await response.json();
+                        showSuccess(resultDiv, `
+                            Prediction: <strong>${data.prediction}</strong><br>
+                            Probability: <strong>${data.probability}%</strong>
+                        `);
+                    } catch (error) {
+                        console.error('Diabetes error:', error);
+                        showError(resultDiv, 'Error: ' + error.message);
+                    }
+                });
+            }
+
+            // Heart Disease Prediction
+            const heartForm = document.getElementById('heartForm');
+            if (heartForm) {
+                heartForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    console.log('Heart form submitted');
+                    
+                    const cholesterolInput = document.getElementById('heart_cholesterol');
+                    const bloodPressureInput = document.getElementById('heart_blood_pressure');
+                    const ageInput = document.getElementById('heart_age');
+                    const smokingInput = document.getElementById('heart_smoking');
+                    const resultDiv = document.getElementById('heartResult');
+                    
+                    // Validate each field individually
+                    if (!validateNumber(cholesterolInput)) {
+                        showError(resultDiv, 'Please enter a valid number for Cholesterol Level.');
+                        return;
+                    }
+                    if (!validateNumber(bloodPressureInput)) {
+                        showError(resultDiv, 'Please enter a valid number for Blood Pressure.');
+                        return;
+                    }
+                    if (!validateNumber(ageInput)) {
+                        showError(resultDiv, 'Please enter a valid number for Age.');
+                        return;
+                    }
+                    if (!validateNumber(smokingInput)) {
+                        showError(resultDiv, 'Please enter a valid number for Smoking (0/1).');
+                        return;
+                    }
+                    
+                    try {
+                        const response = await fetch('/predict_heart_disease', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                cholesterol: parseFloat(cholesterolInput.value),
+                                blood_pressure: parseFloat(bloodPressureInput.value),
+                                age: parseFloat(ageInput.value),
+                                smoking: parseFloat(smokingInput.value)
+                            })
+                        });
+                        
+                        if (!response.ok) {
+                            const error = await response.json();
+                            showError(resultDiv, error.error || 'Server error');
+                            return;
+                        }
+                        
+                        const data = await response.json();
+                        showSuccess(resultDiv, `
+                            Prediction: <strong>${data.prediction}</strong><br>
+                            Probability: <strong>${data.probability}%</strong>
+                        `);
+                    } catch (error) {
+                        console.error('Heart error:', error);
+                        showError(resultDiv, 'Error: ' + error.message);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

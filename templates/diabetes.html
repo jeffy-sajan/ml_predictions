@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block title %}Diabetes Prediction - ML Predictions{% endblock %}
+
+{% block content %}
+    <div class="page-header">
+        <h1>Diabetes Prediction</h1>
+        <p class="lead">Predict diabetes risk based on health metrics</p>
+        <div class="model-info mt-4">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="alert alert-info">
+                        <h5>Model Information</h5>
+                        <p><strong>Algorithm:</strong> Logistic Regression</p>
+                        <p><strong>Accuracy:</strong> 97.5%</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="prediction-card">
+        <div class="card-body">
+            <form id="diabetesForm">
+                <div class="input-group">
+                    <span class="input-group-text">Glucose Level</span>
+                    <input type="number" id="diabetes_glucose" name="glucose" class="form-control" required>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-text">BMI</span>
+                    <input type="number" id="diabetes_bmi" name="bmi" class="form-control" required>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-text">Age</span>
+                    <input type="number" id="diabetes_age" name="age" class="form-control" required>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-text">Blood Pressure</span>
+                    <input type="number" id="diabetes_blood_pressure" name="blood_pressure" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Predict Diabetes</button>
+            </form>
+            <div id="diabetesResult" class="result-box"></div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const diabetesForm = document.getElementById('diabetesForm');
+            if (diabetesForm) {
+                diabetesForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    console.log('Diabetes form submitted');
+                    
+                    const glucoseInput = document.getElementById('diabetes_glucose');
+                    const bmiInput = document.getElementById('diabetes_bmi');
+                    const ageInput = document.getElementById('diabetes_age');
+                    const bloodPressureInput = document.getElementById('diabetes_blood_pressure');
+                    const resultDiv = document.getElementById('diabetesResult');
+                    
+                    if (!validateNumber(glucoseInput)) {
+                        showError(resultDiv, 'Please enter a valid number for Glucose Level.');
+                        return;
+                    }
+                    if (!validateNumber(bmiInput)) {
+                        showError(resultDiv, 'Please enter a valid number for BMI.');
+                        return;
+                    }
+                    if (!validateNumber(ageInput)) {
+                        showError(resultDiv, 'Please enter a valid number for Age.');
+                        return;
+                    }
+                    if (!validateNumber(bloodPressureInput)) {
+                        showError(resultDiv, 'Please enter a valid number for Blood Pressure.');
+                        return;
+                    }
+                    
+                    try {
+                        const response = await fetch('/predict_diabetes', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                glucose: parseFloat(glucoseInput.value),
+                                bmi: parseFloat(bmiInput.value),
+                                age: parseFloat(ageInput.value),
+                                blood_pressure: parseFloat(bloodPressureInput.value)
+                            })
+                        });
+                        
+                        if (!response.ok) {
+                            const error = await response.json();
+                            showError(resultDiv, error.error || 'Server error');
+                            return;
+                        }
+                        
+                        const data = await response.json();
+                        showSuccess(resultDiv, `
+                            Prediction: <strong>${data.prediction}</strong><br>
+                            Probability: <strong>${data.probability}%</strong>
+                        `);
+                    } catch (error) {
+                        console.error('Diabetes error:', error);
+                        showError(resultDiv, 'Error: ' + error.message);
+                    }
+                });
+            }
+        });
+    </script>
+{% endblock %}

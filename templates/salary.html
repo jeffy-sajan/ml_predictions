@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}Salary Prediction - ML Predictions{% endblock %}
+
+{% block content %}
+    <div class="page-header">
+        <h1>Salary Prediction</h1>
+        <p class="lead">Predict your salary based on experience and education</p>
+        <div class="model-info mt-4">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="alert alert-info">
+                        <h5>Model Information</h5>
+                        <p><strong>Algorithm:</strong> {{ algorithm }}</p>
+                        <p><strong>Accuracy:</strong> {{ accuracy }}%</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="prediction-card">
+        <div class="card-body">
+            <form id="salaryForm">
+                <div class="input-group">
+                    <span class="input-group-text">Years of Experience</span>
+                    <input type="number" id="experience" name="experience" class="form-control" required>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-text">Education Level (1-5)</span>
+                    <input type="number" id="education_level" name="education_level" class="form-control" required>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-text">Age</span>
+                    <input type="number" id="age" name="age" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Predict Salary</button>
+            </form>
+            <div id="salaryResult" class="result-box"></div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const salaryForm = document.getElementById('salaryForm');
+            if (salaryForm) {
+                salaryForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    console.log('Salary form submitted');
+                    
+                    const experienceInput = document.getElementById('experience');
+                    const educationLevelInput = document.getElementById('education_level');
+                    const ageInput = document.getElementById('age');
+                    const resultDiv = document.getElementById('salaryResult');
+                    
+                    if (!validateNumber(experienceInput)) {
+                        showError(resultDiv, 'Please enter a valid number for years of experience.');
+                        return;
+                    }
+                    if (!validateNumber(educationLevelInput)) {
+                        showError(resultDiv, 'Please enter a valid number for education level (1-5).');
+                        return;
+                    }
+                    if (!validateNumber(ageInput)) {
+                        showError(resultDiv, 'Please enter a valid number for age.');
+                        return;
+                    }
+                    
+                    try {
+                        const response = await fetch('/predict_salary', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                experience: parseFloat(experienceInput.value),
+                                education_level: parseFloat(educationLevelInput.value),
+                                age: parseFloat(ageInput.value)
+                            })
+                        });
+                        
+                        if (!response.ok) {
+                            const error = await response.json();
+                            showError(resultDiv, error.error || 'Server error');
+                            return;
+                        }
+                        
+                        const data = await response.json();
+                        showSuccess(resultDiv, `Predicted Salary: <strong>₹${data.salary}</strong>`);
+                    } catch (error) {
+                        console.error('Salary error:', error);
+                        showError(resultDiv, 'Error: ' + error.message);
+                    }
+                });
+            }
+        });
+    </script>
+{% endblock %}

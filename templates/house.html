@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}House Price Prediction - ML Predictions{% endblock %}
+
+{% block content %}
+    <div class="page-header">
+        <h1>House Price Prediction</h1>
+        <p class="lead">Predict house prices based on square footage</p>
+        <div class="model-info mt-4">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="alert alert-info">
+                        <h5>Model Information</h5>
+                        <p><strong>Algorithm:</strong> {{ algorithm }}</p>
+                        <p><strong>Accuracy:</strong> {{ accuracy }}%</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="prediction-card">
+        <div class="card-body">
+            <form id="houseForm">
+                <div class="input-group">
+                    <span class="input-group-text">Square Footage</span>
+                    <input type="number" id="square_footage" name="square_footage" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Predict Price</button>
+            </form>
+            <div id="houseResult" class="result-box"></div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const houseForm = document.getElementById('houseForm');
+            if (houseForm) {
+                houseForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    console.log('House form submitted');
+                    
+                    const squareFootageInput = document.getElementById('square_footage');
+                    const resultDiv = document.getElementById('houseResult');
+                    
+                    if (!validateNumber(squareFootageInput)) {
+                        showError(resultDiv, 'Please enter a valid number for square footage.');
+                        return;
+                    }
+                    
+                    try {
+                        const response = await fetch('/predict_house_price', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ square_footage: parseFloat(squareFootageInput.value) })
+                        });
+                        
+                        if (!response.ok) {
+                            const error = await response.json();
+                            showError(resultDiv, error.error || 'Server error');
+                            return;
+                        }
+                        
+                        const data = await response.json();
+                        showSuccess(resultDiv, `Estimated House Price: <strong>₹${data.price}</strong>`);
+                    } catch (error) {
+                        console.error('House error:', error);
+                        showError(resultDiv, 'Error: ' + error.message);
+                    }
+                });
+            }
+        });
+    </script>
+{% endblock %}

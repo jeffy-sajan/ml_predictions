@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}Calories Burned - ML Predictions{% endblock %}
+
+{% block content %}
+    <div class="page-header">
+        <h1>Calories Burned Prediction</h1>
+        <p class="lead">Predict calories burned based on running distance</p>
+        <div class="model-info mt-4">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="alert alert-info">
+                        <h5>Model Information</h5>
+                        <p><strong>Algorithm:</strong> {{ algorithm }}</p>
+                        <p><strong>Accuracy:</strong> {{ accuracy }}%</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="prediction-card">
+        <div class="card-body">
+            <form id="caloriesForm">
+                <div class="input-group">
+                    <span class="input-group-text">Kilometers Run</span>
+                    <input type="number" id="km_run" name="km_run" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Predict Calories</button>
+            </form>
+            <div id="caloriesResult" class="result-box"></div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const caloriesForm = document.getElementById('caloriesForm');
+            if (caloriesForm) {
+                caloriesForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    console.log('Calories form submitted');
+                    
+                    const kmRunInput = document.getElementById('km_run');
+                    const resultDiv = document.getElementById('caloriesResult');
+                    
+                    if (!validateNumber(kmRunInput)) {
+                        showError(resultDiv, 'Please enter a valid number for kilometers run.');
+                        return;
+                    }
+                    
+                    try {
+                        const response = await fetch('/predict_calories', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ km_run: parseFloat(kmRunInput.value) })
+                        });
+                        
+                        if (!response.ok) {
+                            const error = await response.json();
+                            showError(resultDiv, error.error || 'Server error');
+                            return;
+                        }
+                        
+                        const data = await response.json();
+                        showSuccess(resultDiv, `Estimated Calories Burned: <strong>${data.calories}</strong> calories`);
+                    } catch (error) {
+                        console.error('Calories error:', error);
+                        showError(resultDiv, 'Error: ' + error.message);
+                    }
+                });
+            }
+        });
+    </script>
+{% endblock %}
