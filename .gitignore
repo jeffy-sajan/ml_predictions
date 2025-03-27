@@ -20,10 +20,7 @@ wheels/
 .installed.cfg
 *.egg
 
-# Environment
-.env
-.venv
-env/
+# Virtual Environment
 venv/
 ENV/
 
@@ -33,16 +30,19 @@ ENV/
 *.swp
 *.swo
 
-# Models
+# Models and Datasets
 models/*.pkl
 models/*.json
-
-# Datasets
-datasets/*.csv
+models/*.csv
 
 # Logs
 *.log
 
-# OS
+# OS generated files
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db

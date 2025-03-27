@@ -42,23 +42,6 @@ python train_models.py
 python app.py
 ```
 
-## Deployment to Render
-
-1. Create a new account on [Render](https://render.com)
-2. Connect your GitHub account
-3. Create a new Web Service:
-   - Choose "Create New Web Service"
-   - Select your GitHub repository
-   - Choose the branch you want to deploy (usually main/master)
-   - Build Command: `pip install -r requirements.txt`
-   - Start Command: `gunicorn app:app`
-   - Environment Variables:
-     - Add any required environment variables here
-   - Click "Create Web Service"
-
-4. Wait for the deployment to complete
-5. Your application will be available at the URL provided by Render
-
 ## Using the Application
 
 1. Open your web browser and navigate to `http://localhost:5000`

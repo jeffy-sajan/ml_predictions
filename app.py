@@ -183,13 +183,9 @@ def predict_diabetes():
             float(data['blood_pressure'])
         ]
         
-        # Scale the features
-        scaler = joblib.load('models/diabetes_scaler.pkl')
-        features_scaled = scaler.transform([features])
-        
         # Make prediction
-        prediction = models['diabetes'].predict(features_scaled)[0]
-        probability = models['diabetes'].predict_proba(features_scaled)[0][1]
+        prediction = models['diabetes'].predict([features])[0]
+        probability = models['diabetes'].predict_proba([features])[0][1]
         
         return jsonify({
             'prediction': 'Diabetic' if prediction == 1 else 'Non-diabetic',
@@ -244,5 +240,4 @@ def predict_heart_disease():
         return jsonify({'error': 'Server error. Please try again.'}), 500
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5002))
-    app.run(host='0.0.0.0', port=port, debug=True)
+    app.run(debug=True, port=5002)
